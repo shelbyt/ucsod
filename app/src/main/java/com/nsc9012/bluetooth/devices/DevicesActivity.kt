@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import com.nsc9012.bluetooth.R
 import com.nsc9012.bluetooth.extension.*
 import kotlinx.android.synthetic.main.activity_devices.*
@@ -31,7 +32,14 @@ class DevicesActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == BluetoothDevice.ACTION_FOUND) {
                 val device: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)!!
-                deviceListAdapter.addDevice(device)
+                val name: String? = device.name
+                val address: String = device.address
+                val rssi: String =
+                    intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE).toString()
+                val deviceString = name+"|   "+address+"|   " + rssi
+
+                Log.i("DEVICE FOUND", "Name "+name+"address "+address+"RSSI: " + rssi )
+                deviceListAdapter.addDevice(deviceString)
             }
         }
     }
